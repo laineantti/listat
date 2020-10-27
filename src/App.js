@@ -5,60 +5,67 @@ function App() {
 	var randomWords = require("random-words")
 	// 2 listaa joissa satunnaiset item (randomWords) ja id (uuidv4)
 	const [list1, setList1] = useState(
-		Array(10)
+		Array(2)
 			.fill(null)
 			.map(() => ({ id: uuidv4(), word: randomWords() }))
 	)
 	const [list2, setList2] = useState(
-		Array(10)
+		Array(2)
 			.fill(null)
 			.map(() => ({ id: uuidv4(), word: randomWords() }))
 	)
 	const [selected, setSelected] = useState(["", 0, ""]) // itemId, listId, word
 	const [selectedText, setSelectedText] = useState()
-	const [isSelected, setIsSelected] = useState(``)
 
 	const printList = (list, listId) => {
-    if(list1.acessos && list1.length) {
-      
-    } else {
-      // “This list has no items”
-    }
+		const isListEmpty = list.length <= 0
 		return (
 			<div style={{ float: "left" }}>
-				<b>Lista{listId}</b>
-				<ul>
-					{list.map((item) => {
-						if (selected[0] === item.id)
-							return (
-								<li key={item.id}>
-									<button
-										id={item.id}
-										value={item.word}
-										onClick={(event) => {
-											setSelected([event.target.id, listId, event.target.value])
-										}}
-									>
-										{item.word} ✔️
-									</button>
-								</li>
-							)
-						else
-							return (
-								<li key={item.id}>
-									<button
-										id={item.id}
-										value={item.word}
-										onClick={(event) => {
-											setSelected([event.target.id, listId, event.target.value])
-										}}
-									>
-										{item.word}
-									</button>
-								</li>
-							)
-					})}
-				</ul>
+				<b>Lista{listId}</b> (length: {list.length})
+				{isListEmpty ? (
+					<p>This list has no items</p>
+				) : (
+					<ul>
+						{list.map((item) => {
+							if (selected[0] === item.id)
+								return (
+									<li key={item.id}>
+										<button
+											id={item.id}
+											value={item.word}
+											onClick={(event) => {
+												setSelected([
+													event.target.id,
+													listId,
+													event.target.value,
+												])
+											}}
+										>
+											{item.word} ✔️
+										</button>
+									</li>
+								)
+							else
+								return (
+									<li key={item.id}>
+										<button
+											id={item.id}
+											value={item.word}
+											onClick={(event) => {
+												setSelected([
+													event.target.id,
+													listId,
+													event.target.value,
+												])
+											}}
+										>
+											{item.word}
+										</button>
+									</li>
+								)
+						})}
+					</ul>
+				)}
 			</div>
 		)
 	}
@@ -90,11 +97,11 @@ function App() {
 			setList1(list1_added_item)
 			setList2(list2_without_item)
 		}
+		setSelected(["", 0, ""])
 	}
 
 	// valintatilanne
 	useEffect(() => {
-
 		if (selected[0] === "")
 			setSelectedText(
 				<ul>
