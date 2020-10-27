@@ -16,25 +16,43 @@ function App() {
 	)
 	const [selected, setSelected] = useState(["", 0, ""]) // itemId, listId, word
 	const [selectedText, setSelectedText] = useState()
+	const [isSelected, setIsSelected] = useState(``)
 
 	const printList = (list, listId) => {
 		return (
 			<div style={{ float: "left" }}>
 				<b>Lista{listId}</b>
 				<ul>
-					{list.map((item) => (
-						<li key={item.id}>
-							<button
-								id={item.id}
-								value={item.word}
-								onClick={(event) => {
-									setSelected([event.target.id, listId, event.target.value])
-								}}
-							>
-								{item.word}
-							</button>
-						</li>
-					))}
+					{list.map((item) => {
+						if (selected[0] === item.id)
+							return (
+								<li key={item.id}>
+									<button
+										id={item.id}
+										value={item.word}
+										onClick={(event) => {
+											setSelected([event.target.id, listId, event.target.value])
+										}}
+									>
+										{item.word} ✔️
+									</button>
+								</li>
+							)
+						else
+							return (
+								<li key={item.id}>
+									<button
+										id={item.id}
+										value={item.word}
+										onClick={(event) => {
+											setSelected([event.target.id, listId, event.target.value])
+										}}
+									>
+										{item.word}
+									</button>
+								</li>
+							)
+					})}
 				</ul>
 			</div>
 		)
@@ -98,20 +116,26 @@ function App() {
 			<hr />
 			{printList(list1, 1)}
 			<div style={{ float: "left" }}>
-				<button
-					onClick={() => {
-						editLists(1)
-					}}
-				>
-					oikealle
-				</button>
-				<button
-					onClick={() => {
-						editLists(0)
-					}}
-				>
-					vasemmalle
-				</button>
+				<ul>
+					<li>
+						<button
+							onClick={() => {
+								editLists(1)
+							}}
+						>
+							➡️
+						</button>
+					</li>
+					<li>
+						<button
+							onClick={() => {
+								editLists(0)
+							}}
+						>
+							⬅️
+						</button>
+					</li>
+				</ul>
 				<br />
 			</div>
 			{printList(list2, 2)}
