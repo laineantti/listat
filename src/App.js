@@ -1,60 +1,60 @@
-import React, { useState } from "react"
-//import './App.css';
+import React, { useState, useEffect } from "react"
+import { v4 as uuidv4 } from "uuid"
 
 function App() {
-	const [list1, setList1] = useState(["asd", "das"])
-	const [list2, setList2] = useState(["hgf", "fgh"])
-	const [selectedId, setSelectedId] = useState("")
-	const [selectedList, setSelectedList] = useState("")
-	const [moveThisItem, setMoveThisItem] = useState("")
-
-	const moveItem = () => {
-    if(selectedList === "1") {
-      
-    } else {
-
-    }
-  }
+	var randomWords = require("random-words")
+	// 2 listaa joissa satunnaiset item (randomWords) ja id (uuidv4)
+	const [list1, setList1] = useState(
+		Array(10)
+			.fill(null)
+			.map(() => ({ id: uuidv4(), word: randomWords() }))
+	)
+	const [list2, setList2] = useState(
+		Array(10)
+			.fill(null)
+			.map(() => ({ id: uuidv4(), word: randomWords() }))
+	)
+	const [selected, setSelected] = useState(0, "")
+	const [selectedText, setSelectedText] = useState()
 
 	const printList = (list, listId) => {
 		return (
 			<div style={{ float: "left" }}>
+        <b>Lista{listId}</b>
 				<ul>
-					{list.map((item, id) => (
+					{list.map((item) => (
 						<li>
-							<button
-								id={id}
-								onClick={(event) => {
-									setSelectedId(event.target.id)
-									setSelectedList(listId)
-								}}
-							>
-								id: {id}, item: {item}
+							<button id={item.id} onClick={(event) => {setSelected([event.target.id, listId])}}>
+								{item.word}
 							</button>
 						</li>
 					))}
 				</ul>
 			</div>
 		)
-	}
+  }
+  
+  const editLists = () => {
+
+  }
+
+  // valintatilanne
+	useEffect(() => {
+		if (selected[0] === "") setSelectedText("Valitse jotain...")
+		else setSelectedText(`Lista${selected[1]} (id ${selected[0]}) valittuna!`)
+	}, [selected])
 
 	return (
 		<div>
-			<h4>
-				selectedId: {selectedId}, selectedList: {selectedList}
-			</h4>
-			{printList(list1, "1")}
+      <b>{selectedText}</b>
+				<br />
+        <hr/>
+			{printList(list1, 1)}
 			<div style={{ float: "left" }}>
-				<button
-					onClick={() => {
-						moveItem()
-					}}
-				>
-					oikealle
-				</button><br/>
-				<button>vasemmalle</button>
+				<button onClick={() => {}}>oikealle</button>
+				<br />
 			</div>
-			{printList(list2, "2")}
+			{printList(list2, 2)}
 		</div>
 	)
 }
