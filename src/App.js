@@ -14,8 +14,7 @@ function App() {
 			.fill(null)
 			.map(() => ({ id: uuidv4(), word: randomWords() }))
 	)
-	const [tempList, setTempList] = useState()
-	const [selected, setSelected] = useState(["", 0]) // itemId, listId, word
+	const [selected, setSelected] = useState(["", 0, ""]) // itemId, listId, word
 	const [selectedText, setSelectedText] = useState()
 
 	const printList = (list, listId) => {
@@ -41,38 +40,59 @@ function App() {
 		)
 	}
 
-	const editLists = () => {
-		if (selected[1] === 1) {
-			setTempList(list1.filter((item) => item.id === selected[0]))
-			setList1(list1.filter((item) => item.id === !selected[0]))
+	const editLists = (direction) => {
+		// lista1 -> oikealle
+		if (direction === 1 && selected[1] === 1) {
+			let list1_only_item = list1.filter((item) => item.id === selected[0])
+			let list1_without_item = list1.filter((item) => item.id !== selected[0])
+			let list2_added_item = list2.concat(list1_only_item)
+			setList1(list1_without_item)
+			setList2(list2_added_item)
+		}
+		// lista1 -> vasemmalle
+		if (direction === 0 && selected[1] === 1) {
+		}
+		// lista2 -> oikealle
+		if (direction === 1 && selected[1] === 2) {
+		}
+		// lista2 -> vasemmalle
+		if (direction === 0 && selected[1] === 2) {
+			let list2_only_item = list2.filter((item) => item.id === selected[0])
+			let list2_without_item = list2.filter((item) => item.id !== selected[0])
+			let list1_added_item = list1.concat(list2_only_item)
+			setList1(list1_added_item)
+			setList2(list2_without_item)
 		}
 	}
 
 	// valintatilanne
 	useEffect(() => {
-		if (selected[0] === "") setSelectedText(
-      <ul>
-        <b>Valitse jotain...
-        <li>============</li></b>
-        <li>word: -,</li>
-        <li>itemId: -,</li>
-        <li>listId: -</li>
-      </ul>
-    )
+		if (selected[0] === "")
+			setSelectedText(
+				<ul>
+					<li>word: -,</li>
+					<li>itemId: -,</li>
+					<li>listId: -</li>
+				</ul>
+			)
 		else
 			setSelectedText(
 				<ul>
-					<b>Valittuna
-					<li>============</li></b>
-					<li>word: <b>{selected[2]}</b></li>
-					<li>itemId: <b>{selected[0]}</b></li>
-					<li>listId: <b>{selected[1]}</b></li>
+					<li>
+						word: <b>{selected[2]}</b>
+					</li>
+					<li>
+						itemId: <b>{selected[0]}</b>
+					</li>
+					<li>
+						listId: <b>{selected[1]}</b>
+					</li>
 				</ul>
 			)
 	}, [selected])
 
 	return (
-		<div>
+		<div style={{ padding: "10px" }}>
 			{selectedText}
 			<br />
 			<hr />
@@ -80,10 +100,17 @@ function App() {
 			<div style={{ float: "left" }}>
 				<button
 					onClick={() => {
-						editLists()
+						editLists(1)
 					}}
 				>
 					oikealle
+				</button>
+				<button
+					onClick={() => {
+						editLists(0)
+					}}
+				>
+					vasemmalle
 				</button>
 				<br />
 			</div>
