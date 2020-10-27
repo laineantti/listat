@@ -19,6 +19,11 @@ function App() {
 	const [isSelected, setIsSelected] = useState(``)
 
 	const printList = (list, listId) => {
+    if(list1.acessos && list1.length) {
+      
+    } else {
+      // “This list has no items”
+    }
 		return (
 			<div style={{ float: "left" }}>
 				<b>Lista{listId}</b>
@@ -67,13 +72,17 @@ function App() {
 			setList1(list1_without_item)
 			setList2(list2_added_item)
 		}
-		// lista1 -> vasemmalle
+		// lista1 <- vasemmalle
 		if (direction === 0 && selected[1] === 1) {
+			let list1_without_item = list1.filter((item) => item.id !== selected[0])
+			setList1(list1_without_item)
 		}
 		// lista2 -> oikealle
 		if (direction === 1 && selected[1] === 2) {
+			let list2_without_item = list2.filter((item) => item.id !== selected[0])
+			setList2(list2_without_item)
 		}
-		// lista2 -> vasemmalle
+		// lista2 <- vasemmalle
 		if (direction === 0 && selected[1] === 2) {
 			let list2_only_item = list2.filter((item) => item.id === selected[0])
 			let list2_without_item = list2.filter((item) => item.id !== selected[0])
@@ -85,6 +94,7 @@ function App() {
 
 	// valintatilanne
 	useEffect(() => {
+
 		if (selected[0] === "")
 			setSelectedText(
 				<ul>
